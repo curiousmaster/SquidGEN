@@ -1,13 +1,35 @@
 #! /usr/bin/bash
 
+#======================================================================
+# Create group and add sysadmin
+#======================================================================
 groupadd squidadm
-
-chgrp -r squidadm bin
 usermod -a -G squidadm sysadmin
 
+#======================================================================
+# Setup sudo for sysadmin
+#======================================================================
 cat > /etc/sudoers.d/squidadm <<_EOF_
 %squidadm ALL=(ALL:ALL) NOPASSWD:/etc/squid/bin/*
 _EOF_
+chmod 400 /etc/sudoers.d/squidadm
+
+#======================================================================
+# Change permissions of environment
+#======================================================================
 chmod 755 bin/*
-chgrp -r squidadm rules.d
+chgrp squidadm bin
+chgrp squidadm bin/*
+
 chmod 770 rules.d
+chmod 660 rules.d
+chgrp squidadm rules.d
+chgrp squidadm rules.d/*
+
+#======================================================================
+# Change service for Squid
+#======================================================================
+mv /usr/lib/systemd/system/squid.service /usr/lib/systemd/system/squid.service-dist
+cp usr/lib/systemd/system/squid.service /usr/lib/systemd/system/squid.service 
+
+systemctl daemon-reload
