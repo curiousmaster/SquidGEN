@@ -1,0 +1,2 @@
+# alsquid
+AL Squid setup
