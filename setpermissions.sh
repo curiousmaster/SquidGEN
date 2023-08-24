@@ -5,6 +5,7 @@
 #======================================================================
 groupadd squidadm
 usermod -a -G squidadm sysadmin
+usermod -a -G proxy sysadmin
 
 #======================================================================
 # Setup sudo for sysadmin
